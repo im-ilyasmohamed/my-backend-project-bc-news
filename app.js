@@ -1,6 +1,12 @@
 const express = require("express"); // import express api
 const { getTopics } = require("./controllers/topics.controller"); // require in controller class
 const app = express(); // create and invoke instance of express object object
+const endpoints = require("./endpoints.json"); //require in static json file,
+
+// Define the /api endpoint
+app.get('/api', (req, res) => {
+  res.status(200).send(endpoints); // this will send endpoint.json file, in the body for integration test etc
+});
 
 app.get("/api/topics", getTopics); //create api endpoint for /api/topics
 

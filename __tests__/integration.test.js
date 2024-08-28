@@ -14,7 +14,7 @@ describe("endpoints", () => {
         .get("/api/topics")
         .expect(200)
         .then((response) => {
-          console.log(response.body.topics.rows);
+          // console.log(response.body.topics.rows);
           response.body.topics.rows.forEach((topicItem) => {
             expect(topicItem).toHaveProperty("slug", expect.any(String));
             expect(topicItem).toHaveProperty("description", expect.any(String));
@@ -22,6 +22,27 @@ describe("endpoints", () => {
         });
     });
     test("200: returns array of objects with following properties ", () => {});
+  });
+});
+describe("endpoints file ", () => {
+  test.only("Should return a JSON object containing all available endpoints", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then((response) => {
+        // method 1
+        console.log(response.body); // will print endpoint.json file
+        expect(response.body).toHaveProperty("GET /api");
+        expect(response.body).toHaveProperty("GET /api/topics");
+        expect(response.body).toHaveProperty("GET /api/articles");
+        // method 2, optional, Object.keys(response.body).forEach( expect(thisItem).toHaveProperty
+        // response.body.forEach((item) => {
+        // used more when we want any item
+        //   expect(item).toHaveProperty("GET /api", expect.any(String));
+        //   expect(item).toHaveProperty("GET /api/topics"), expect.any(String);
+        //   expect(item).toHaveProperty("GET /api/articles", expect.any(String));
+        // });
+      });
   });
 });
 
