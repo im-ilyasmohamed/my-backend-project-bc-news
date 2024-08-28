@@ -8,19 +8,17 @@ beforeAll(() => {
 }); // before all seed the data for my test
 describe("endpoints", () => {
   describe("GET /api/topics", () => {
-    test("200: returns 200", () => {
+    test("200: returns array of topic objects", () => {
       //console.log("hello");
       return request(app)
         .get("/api/topics")
         .expect(200)
         .then((response) => {
-          console.log(response.body.topics.rows)
-          response.body.topics.rows.forEach(
-            (topicItem) => {
-              expect(topicItem).toHaveProperty("slug", expect.any(String));
-              expect(topicItem).toHaveProperty("description", expect.any(String));
-            }
-          );
+          console.log(response.body.topics.rows);
+          response.body.topics.rows.forEach((topicItem) => {
+            expect(topicItem).toHaveProperty("slug", expect.any(String));
+            expect(topicItem).toHaveProperty("description", expect.any(String));
+          });
         });
     });
     test("200: returns array of objects with following properties ", () => {});
