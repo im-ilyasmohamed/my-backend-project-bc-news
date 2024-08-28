@@ -31,10 +31,15 @@ exports.fetchArticleByID = (articleID) => {
       articles
     WHERE 
       article_id = $1;
-  `;
+      `;
 
-  //query db, with (queryString, $1)
-  return db.query(queryString, articleID).then(({ rows }) => {
-    console.log(rows);
+  // invalid param/id input, return 400 status
+  if (articleID === undefined) {
+    return Promise.reject({ status: 400, msg: "invalid input" });
+  }
+
+  //query db, with params (queryString, $1)
+  return db.query(queryString, [articleID]).then(({ rows }) => {
+    return rows;
   });
 };

@@ -16,12 +16,10 @@ exports.getTopics = (req, res, next) => {
 
 // get article by id
 exports.getArticleByID = (req, res, next) => {
-  const { id } = req.params;
-  console.log(id, "<----- id");
-  fetchArticleByID(id).then(() =>
-    //
-    {
-      //
-    }
-  );
+  const { article_id } = req.params;
+  fetchArticleByID(article_id).then((articleItem) => {
+    // need to put tempory error handling here
+    res.status(200).send(articleItem);
+  });
 };
+
