@@ -1,4 +1,4 @@
-const { fetchAllParks } = require("../models/topics.models"); // import model
+const { fetchAllParks, fetchArticleByID } = require("../models/topics.models"); // import model
 
 // gets all treasures, next input for handling errors
 exports.getTopics = (req, res, next) => {
@@ -12,4 +12,17 @@ exports.getTopics = (req, res, next) => {
       next(err);
     });
   //
+};
+
+// get article by id
+exports.getArticleByID = (req, res, next) => {
+  const { article_id } = req.params;
+  fetchArticleByID(article_id)
+    .then((articleItem) => {
+      // need to put tempory error handling here
+      res.status(200).send(articleItem);
+    })
+    .catch((err) => {
+      res.status(400).send({ msg: "invalid article ID" }); //
+    });
 };

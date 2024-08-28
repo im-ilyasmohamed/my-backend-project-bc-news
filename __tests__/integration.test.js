@@ -21,17 +21,36 @@ describe("endpoints", () => {
           });
         });
     });
-    test("200: returns array of objects with following properties ", () => {});
+    test.only("200: returns article object by article id param input", () => {
+      return request(app)
+        .get("/api/articles/1")
+        .expect(200)
+        .then(({ body }) => {
+          // check correct output
+          expect(Array.isArray(body)).toBe(true);
+          expect(body.length).toBe(1);
+
+          // test each value name, and output type
+          expect(body[0]).toHaveProperty("author", expect.any(String));
+          expect(body[0]).toHaveProperty("title", expect.any(String));
+          expect(body[0]).toHaveProperty("article_id", expect.any(Number));
+          expect(body[0]).toHaveProperty("body", expect.any(String));
+          expect(body[0]).toHaveProperty("topic", expect.any(String));
+          expect(body[0]).toHaveProperty("created_at", expect.any(String));
+          expect(body[0]).toHaveProperty("votes", expect.any(Number));
+          expect(body[0]).toHaveProperty("article_img_url", expect.any(String));
+        });
+    });
   });
 });
 describe("endpoints file ", () => {
-  test.only("Should return a JSON object containing all available endpoints", () => {
+  test("Should return a JSON object containing all available endpoints", () => {
     return request(app)
       .get("/api")
       .expect(200)
       .then((response) => {
         // method 1
-        console.log(response.body); // will print endpoint.json file
+        // console.log(response.body); // will print endpoint.json file
         expect(response.body).toHaveProperty("GET /api");
         expect(response.body).toHaveProperty("GET /api/topics");
         expect(response.body).toHaveProperty("GET /api/articles");
@@ -45,13 +64,12 @@ describe("endpoints file ", () => {
       });
   });
 });
-
 // example of previous test I created
 // test("200: returns an array of the treasure object", () => {
 //     return request(app)
 //       .get("/api/treasures")
 //       .expect(200)
-//       .then(({ body: { treasures } }) => {
+//       .then(( { body: { treasures } } ) => {
 //         expect(treasures[0]).toEqual(
 //           expect.objectContaining({
 //             treasure_name: expect.any(String),

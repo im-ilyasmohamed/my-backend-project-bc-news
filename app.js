@@ -1,14 +1,16 @@
 const express = require("express"); // import express api
-const { getTopics } = require("./controllers/topics.controller"); // require in controller class
+const { getTopics, getArticleByID } = require("./controllers/topics.controller"); // require in controller class
 const app = express(); // create and invoke instance of express object object
 const endpoints = require("./endpoints.json"); //require in static json file,
+
+app.get("/api/articles/:article_id", getArticleByID)
+
+app.get("/api/topics", getTopics); //create api endpoint for /api/topics
 
 // Define the /api endpoint
 app.get('/api', (req, res) => {
   res.status(200).send(endpoints); // this will send endpoint.json file, in the body for integration test etc
 });
-
-app.get("/api/topics", getTopics); //create api endpoint for /api/topics
 
 // create endpoint for this, default for route '/'
 // had to put this function at the bottom of the api route options for it to work
