@@ -16,7 +16,7 @@ exports.fetchAllParks = () => {
 };
 
 exports.fetchArticleByID = (articleID) => {
-  //query string where id is $1
+  // query string where id is $1
   let queryString = `
     SELECT 
         author,
@@ -32,13 +32,12 @@ exports.fetchArticleByID = (articleID) => {
     WHERE 
       article_id = $1;
       `;
-
   // invalid param/id input, return 400 status
   if (articleID === undefined) {
     return Promise.reject({ status: 400, msg: "invalid input" }); // attempt at error handling
   }
 
-  //query db, with params (queryString, $1)
+  // query db, with params (queryString, $1)
   return db.query(queryString, [articleID]).then(({ rows }) => {
     return rows;
   });

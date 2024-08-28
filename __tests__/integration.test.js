@@ -6,6 +6,7 @@ const request = require("supertest"); // http client, for connecting to the surv
 beforeAll(() => {
   seed(data);
 }); // before all seed the data for my test
+
 describe("endpoints", () => {
   describe("GET /api/topics", () => {
     test("200: returns array of topic objects", () => {
