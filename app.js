@@ -2,7 +2,7 @@ const express = require("express"); // import express api
 const {
   getTopics,
   getArticleByID,
-} = require("./controllers/all.controller"); // require in controller class
+} = require("./controllers/all.controllers"); // require in controller class
 const app = express(); // create and invoke instance of express object object
 const endpoints = require("./endpoints.json"); //require in static json file,
 
