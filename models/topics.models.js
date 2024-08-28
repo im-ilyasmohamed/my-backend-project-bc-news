@@ -35,7 +35,7 @@ exports.fetchArticleByID = (articleID) => {
 
   // invalid param/id input, return 400 status
   if (articleID === undefined) {
-    return Promise.reject({ status: 400, msg: "invalid input" });
+    return Promise.reject({ status: 400, msg: "invalid input" }); // attempt at error handling
   }
 
   //query db, with params (queryString, $1)

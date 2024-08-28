@@ -17,9 +17,12 @@ exports.getTopics = (req, res, next) => {
 // get article by id
 exports.getArticleByID = (req, res, next) => {
   const { article_id } = req.params;
-  fetchArticleByID(article_id).then((articleItem) => {
-    // need to put tempory error handling here
-    res.status(200).send(articleItem);
-  });
+  fetchArticleByID(article_id)
+    .then((articleItem) => {
+      // need to put tempory error handling here
+      res.status(200).send(articleItem);
+    })
+    .catch((err) => {
+      res.status(400).send({ msg: "invalid article ID" }); //
+    });
 };
-
