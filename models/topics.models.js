@@ -14,3 +14,27 @@ exports.fetchAllParks = () => {
     return sqlQueryReturnObject;
   });
 };
+
+exports.fetchArticleByID = (articleID) => {
+  //query string where id is $1
+  let queryString = `
+    SELECT 
+        author,
+        title,
+        article_id,
+        body,
+        topic,
+        created_at,
+        votes,
+        article_img_url
+    FROM 
+      articles
+    WHERE 
+      article_id = $1;
+  `;
+
+  //query db, with (queryString, $1)
+  return db.query(queryString, articleID).then(({ rows }) => {
+    console.log(rows);
+  });
+};

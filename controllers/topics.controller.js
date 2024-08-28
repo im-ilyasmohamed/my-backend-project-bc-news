@@ -1,4 +1,4 @@
-const { fetchAllParks } = require("../models/topics.models"); // import model
+const { fetchAllParks, fetchArticleByID } = require("../models/topics.models"); // import model
 
 // gets all treasures, next input for handling errors
 exports.getTopics = (req, res, next) => {
@@ -12,4 +12,16 @@ exports.getTopics = (req, res, next) => {
       next(err);
     });
   //
+};
+
+// get article by id
+exports.getArticleByID = (req, res, next) => {
+  const { id } = req.params;
+  console.log(id, "<----- id");
+  fetchArticleByID(id).then(() =>
+    //
+    {
+      //
+    }
+  );
 };
