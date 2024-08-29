@@ -1,14 +1,13 @@
-const { fetchAllParks } = require("../models/topics.models"); // import model
+const { fetchAllTopics } = require("../models/topics.models"); // import model
 const {
   fetchArticleByID,
   fetchAllArticles,
 } = require("../models/articles.model");
-
 // gets all treasures, next input for handling errors
 exports.getTopics = (req, res, next) => {
   // nothing in req object, no id, body etc
   // use the model
-  fetchAllParks()
+  fetchAllTopics()
     .then((topics) => {
       res.status(200).send({ topics });
     })
@@ -17,7 +16,6 @@ exports.getTopics = (req, res, next) => {
     });
   //
 };
-
 // get article by id
 // should use next for middleware error handline ---------------
 exports.getArticleByID = (req, res) => {
@@ -25,13 +23,13 @@ exports.getArticleByID = (req, res) => {
   fetchArticleByID(article_id)
     .then((articleItem) => {
       // need to put tempory error handling here
-      res.status(200).send(articleItem);
+
+      res.status(200).send({ articleItem });
     })
     .catch((err) => {
       res.status(400).send({ msg: "invalid article ID" }); //
     });
 };
-
 exports.getAllArticles = (req, res) => {
   // get the data print it
   fetchAllArticles().then((allArticles) => {

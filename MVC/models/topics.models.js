@@ -1,6 +1,6 @@
-const db = require("../db/connection"); // connect to the database
+const db = require("../../db/connection"); // connect to the database
 
-exports.fetchAllParks = () => {
+exports.fetchAllTopics = () => {
   // let query string literals for db query
 
   let queryString = `
@@ -11,7 +11,7 @@ exports.fetchAllParks = () => {
   // return db.query, return each row
   return db.query(queryString).then((sqlQueryReturnObject) => {
     // console.log(sqlQueryReturnObject)
+    console.log("<---- THIS RAN");
     return sqlQueryReturnObject;
   });
 };
-

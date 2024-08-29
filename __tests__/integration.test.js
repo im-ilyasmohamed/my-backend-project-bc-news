@@ -4,9 +4,11 @@ const data = require("../db/data/test-data"); // data to for seeding
 const app = require("../app"); // request(app)
 const request = require("supertest"); // http client, for connecting to the surver
 beforeAll(() => {
-  seed(data);
+  return seed(data);
 }); // before all seed the data for my test
-
+afterAll(() => {
+  return db.end();
+});
 describe("endpoints", () => {
   describe("GET /api/topics", () => {
     test("200: returns array of topic objects", () => {
@@ -27,40 +29,46 @@ describe("endpoints", () => {
         .get("/api/articles/1")
         .expect(200)
         .then(({ body }) => {
+          const mySingleArticle = body.articleItem;
           // check correct output
-          expect(Array.isArray(body)).toBe(true);
-          expect(body.length).toBe(1);
+          console.log(mySingleArticle);
+          expect(Array.isArray(mySingleArticle)).toBe(true);
+          expect(mySingleArticle.length).toBe(1);
 
           // test each value name, and output type
-          expect(body[0]).toHaveProperty("author", expect.any(String));
-          expect(body[0]).toHaveProperty("title", expect.any(String));
-          expect(body[0]).toHaveProperty("article_id", expect.any(Number));
-          expect(body[0]).toHaveProperty("body", expect.any(String));
-          expect(body[0]).toHaveProperty("topic", expect.any(String));
-          expect(body[0]).toHaveProperty("created_at", expect.any(String));
-          expect(body[0]).toHaveProperty("votes", expect.any(Number));
-          expect(body[0]).toHaveProperty("article_img_url", expect.any(String));
+          expect(mySingleArticle[0]).toHaveProperty(
+            "author",
+            expect.any(String)
+          );
+          expect(mySingleArticle[0]).toHaveProperty(
+            "title",
+            expect.any(String)
+          );
+          expect(mySingleArticle[0]).toHaveProperty(
+            "article_id",
+            expect.any(Number)
+          );
+          expect(mySingleArticle[0]).toHaveProperty("body", expect.any(String));
+          expect(mySingleArticle[0]).toHaveProperty(
+            "topic",
+            expect.any(String)
+          );
+          expect(mySingleArticle[0]).toHaveProperty(
+            "created_at",
+            expect.any(String)
+          );
+          expect(mySingleArticle[0]).toHaveProperty(
+            "votes",
+            expect.any(Number)
+          );
+          expect(mySingleArticle[0]).toHaveProperty(
+            "article_img_url",
+            expect.any(String)
+          );
         });
     });
-    test.only("200: returns article object by article id param input", () => {
-      return request(app)
-        .get("/api/articles/1")
-        .expect(200)
-        .then(({ body }) => {
-          // check correct output
-          expect(Array.isArray(body)).toBe(true);
-          expect(body.length).toBe(1);
-
-          // test each value name, and output type
-          expect(body[0]).toHaveProperty("author", expect.any(String));
-          expect(body[0]).toHaveProperty("title", expect.any(String));
-          expect(body[0]).toHaveProperty("article_id", expect.any(Number));
-          expect(body[0]).toHaveProperty("body", expect.any(String));
-          expect(body[0]).toHaveProperty("topic", expect.any(String));
-          expect(body[0]).toHaveProperty("created_at", expect.any(String));
-          expect(body[0]).toHaveProperty("votes", expect.any(Number));
-          expect(body[0]).toHaveProperty("article_img_url", expect.any(String));
-        });
+    test.only("200: //", () => {
+      //
     });
   });
 });

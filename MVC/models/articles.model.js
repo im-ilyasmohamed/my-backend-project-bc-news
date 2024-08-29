@@ -1,4 +1,4 @@
-const db = require("../db/connection"); // connect to the database
+const db = require("../../db/connection"); // connect to the database
 
 exports.fetchArticleByID = (articleID) => {
   // query string where id is $1
