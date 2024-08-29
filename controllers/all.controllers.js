@@ -1,4 +1,4 @@
-const { fetchAllParks } = require("../models/topics.models"); // import model
+const { fetchAllTopics } = require("../models/topics.models"); // import model
 const {
   fetchArticleByID,
   fetchAllArticles,
@@ -8,7 +8,7 @@ const {
 exports.getTopics = (req, res, next) => {
   // nothing in req object, no id, body etc
   // use the model
-  fetchAllParks()
+  fetchAllTopics()
     .then((topics) => {
       res.status(200).send({ topics });
     })
@@ -34,10 +34,10 @@ exports.getArticleByID = (req, res) => {
 
 exports.getAllArticles = (req, res) => {
   // get the data print it
-  fetchAllArticles().then((allArticles) => {
-    console.log(allArticles, "<---- all articles from the controller");
-  });
+  fetchAllArticles().then((arrayOfArticles) => {
+    // console.log(arrayOfArticles, "<---- all articles from the controller");
 
-  // send the status code, along with the
-  res.status(200).send({ msg: "message from getAllArticles" });
+    // send the status code, along with the
+    res.status(200).send({ arrayOfArticles });
+  });
 };

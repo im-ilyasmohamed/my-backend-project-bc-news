@@ -1,6 +1,6 @@
 const db = require("../db/connection"); // connect to the database
 
-exports.fetchAllParks = () => {
+exports.fetchAllTopics = () => {
   // let query string literals for db query
 
   let queryString = `
@@ -14,4 +14,3 @@ exports.fetchAllParks = () => {
     return sqlQueryReturnObject;
   });
 };
-
