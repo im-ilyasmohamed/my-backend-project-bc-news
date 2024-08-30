@@ -8,7 +8,7 @@ const {
 const app = express(); // create and invoke instance of express object object
 const endpoints = require("./endpoints.json"); //require in static json file,
 
-// lobal error handler middleware, with default status code and message
+// global error handler middleware, with default status code and message
 app.use((err, req, res, next) => {
   res
     .status(err.status || 500)
