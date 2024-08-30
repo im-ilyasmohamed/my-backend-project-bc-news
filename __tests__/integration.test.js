@@ -3,15 +3,17 @@ const seed = require("../db/seeds/seed"); // seed the database, drop, create etc
 const data = require("../db/data/test-data"); // data to for seeding
 const app = require("../app"); // request(app)
 const request = require("supertest"); // http client, for connecting to the surver
+const { forEach } = require("../db/data/test-data/articles");
+const { expect } = require("@jest/globals");
 beforeAll(() => {
   return seed(data);
 }); // before all seed the data for my test
 afterAll(() => {
   return db.end();
-});
+}); // close db that was created in model
 describe("endpoints", () => {
   describe("GET /api/topics", () => {
-    test("200: returns array of topic objects", () => {
+    test("200: returns array of all topic objects", () => {
       //console.log("hello");
       return request(app)
         .get("/api/topics")
@@ -31,7 +33,7 @@ describe("endpoints", () => {
         .then(({ body }) => {
           const mySingleArticle = body.articleItem;
           // check correct output
-          console.log(mySingleArticle);
+          //console.log(mySingleArticle);
           expect(Array.isArray(mySingleArticle)).toBe(true);
           expect(mySingleArticle.length).toBe(1);
 
@@ -67,8 +69,45 @@ describe("endpoints", () => {
           );
         });
     });
-    test.only("200: //", () => {
-      //
+    test("200: returns an array of comments for specific article based on id param input", () => {
+      return request(app)
+        .get("/api/articles/")
+        .expect(200)
+        .then(({ body }) => {
+          body.allArticles.forEach((eachItem) => {
+            // test each value name, and output type
+            expect(eachItem).toHaveProperty("author", expect.any(String));
+            expect(eachItem).toHaveProperty("title", expect.any(String));
+            expect(eachItem).toHaveProperty("article_id", expect.any(Number));
+            expect(eachItem).toHaveProperty("body", expect.any(String));
+            expect(eachItem).toHaveProperty("topic", expect.any(String));
+            expect(eachItem).toHaveProperty("created_at", expect.any(String));
+            expect(eachItem).toHaveProperty("votes", expect.any(Number));
+            expect(eachItem).toHaveProperty(
+              "article_img_url",
+              expect.any(String)
+            );
+            expect(eachItem).toHaveProperty(
+              "comment_count",
+              expect.any(String)
+            ); // count number is returned as string, so should work
+          });
+        });
+    });
+    test("200: returns an array of comments for specific article based on id param input", () => {
+      return request(app)
+        .get("/api/articles/1/comments")
+        .expect(200)
+        .then(({ body }) => {
+          body.commentItem.forEach((eachItem) => {
+            expect(eachItem).toHaveProperty("comment_id", expect.any(Number));
+            expect(eachItem).toHaveProperty("votes", expect.any(Number));
+            expect(eachItem).toHaveProperty("created_at", expect.any(String));
+            expect(eachItem).toHaveProperty("author", expect.any(String));
+            expect(eachItem).toHaveProperty("body", expect.any(String));
+            expect(eachItem).toHaveProperty("article_id", expect.any(Number));
+          });
+        });
     });
   });
 });
@@ -94,6 +133,7 @@ describe("endpoints file ", () => {
       });
   });
 });
+
 // example of previous test I created
 // test("200: returns an array of the treasure object", () => {
 //     return request(app)

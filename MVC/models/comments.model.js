@@ -4,15 +4,25 @@ const db = require("../../db/connection"); // connect to db, for db.query(), fro
 exports.fetchCommentsByID = (article_id) => {
   //      create query
   let myQuery = `
-  SELECT * 
-  FROM comments
+    SELECT 
+      comment_id,
+      votes,
+      created_at,
+      author,
+      body,
+      article_id
+    FROM 
+      comments
+    WHERE 
+      article_id = $1
+  
   `;
 
-  // basic error handline
+  // basic error handling
   if (article_id === undefined || article_id === "") {
     return Promise.reject({ status: 400, msg: "invalid input" });
   }
-
-  //      call on row funcction, .then() promise which return row from query
-  db.query(myQuery, [article_id]).then(({ rows }) => rows);
+  // console.log();
+  // call on row funcction, .then() promise which return row from query
+  return db.query(myQuery, [article_id]).then(({ rows }) => rows);
 };

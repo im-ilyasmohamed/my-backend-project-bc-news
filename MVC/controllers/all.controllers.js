@@ -3,6 +3,9 @@ const {
   fetchArticleByID,
   fetchAllArticles,
 } = require("../models/articles.model");
+const { fetchCommentsByID } = require("../models/comments.model");
+
+// --------- topics ----------
 // gets all treasures, next input for handling errors
 exports.getTopics = (req, res, next) => {
   // nothing in req object, no id, body etc
@@ -16,6 +19,8 @@ exports.getTopics = (req, res, next) => {
     });
   //
 };
+
+// --------- articles ----------
 // get article by id
 // should use next for middleware error handline ---------------
 exports.getArticleByID = (req, res) => {
@@ -30,12 +35,27 @@ exports.getArticleByID = (req, res) => {
       res.status(400).send({ msg: "invalid article ID" }); //
     });
 };
+
+//////////////////////////////////////
+////// FINISH THIS FUNCTION //////////
+//////////////////////////////////////
 exports.getAllArticles = (req, res) => {
   // get the data print it
   fetchAllArticles().then((allArticles) => {
-    console.log(allArticles, "<---- all articles from the controller");
+    res.status(200).send({ allArticles });
   });
+};
 
-  // send the status code, along with the
-  res.status(200).send({ msg: "message from getAllArticles" });
+// --------- comments ----------
+exports.getCommentsByID = (req, res, next) => {
+  const { article_id } = req.params;
+  // get from model/database
+  fetchCommentsByID(article_id)
+    .then((commentItem) => {
+      // send the status code, along with the article
+      res.status(200).send({ commentItem });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
