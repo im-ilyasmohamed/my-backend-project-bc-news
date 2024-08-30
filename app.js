@@ -2,9 +2,22 @@ const express = require("express"); // import express api
 const {
   getTopics,
   getArticleByID,
+  getCommentsByID,
+  getAllArticles,
 } = require("./MVC/controllers/all.controllers"); // require in controller class
 const app = express(); // create and invoke instance of express object object
 const endpoints = require("./endpoints.json"); //require in static json file,
+
+// lobal error handler middleware, with default status code and message
+app.use((err, req, res, next) => {
+  res
+    .status(err.status || 500)
+    .send({ msg: err.message || "Internal Server Error" });
+});
+
+app.get("/api/articles/", getAllArticles);
+
+app.get("/api/articles/:article_id/comments", getCommentsByID);
 
 app.get("/api/articles/:article_id", getArticleByID);
 
