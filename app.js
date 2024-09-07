@@ -4,10 +4,11 @@ const {
   getArticleByID,
   getCommentsByID,
   getAllArticles,
+  postComments,
 } = require("./MVC/controllers/all.controllers"); // require in controller class
-const app = express(); // create and invoke instance of express object object
-const endpoints = require("./endpoints.json"); //require in static json file,
+const endpoints = require("./endpoints.json"); //require in static json file, showing list of endpoints for /api route
 
+const app = express(); // create and invoke instance of express object object
 // global error handler middleware, with default status code and message
 app.use((err, req, res, next) => {
   res
@@ -15,12 +16,9 @@ app.use((err, req, res, next) => {
     .send({ msg: err.message || "Internal Server Error" });
 });
 
-app.get("/api/articles/", getAllArticles);
+app.use(express.json()); // processing post
 
-app.get("/api/articles/:article_id/comments", getCommentsByID);
-
-app.get("/api/articles/:article_id", getArticleByID);
-
+// ------- api endpoints -----------------------------------
 app.get("/api/topics", getTopics); //create api endpoint for /api/topics
 
 // Define the /api endpoint
@@ -28,10 +26,20 @@ app.get("/api", (req, res) => {
   res.status(200).send(endpoints); // this will send endpoint.json file, in the body for integration test etc
 });
 
+app.get("/api/articles/:article_id", getArticleByID);
+
+app.get("/api/articles/", getAllArticles);
+
+app.get("/api/articles/:article_id/comments", getCommentsByID); // get
+
+app.post("/api/articles/:article_id/comments", postComments); // post
+
+// ----------------------------------------------------------
+
 // create endpoint for this, default for route '/'
 // had to put this function at the bottom of the api route options for it to work
 app.all("/*", (req, res) => {
-  //all is for get post etc
+  // all is for - get, post, put, delete, etc
   res.status(404).send({ msg: "404 Not Found" }); // - // - // - //
 });
 

@@ -11,7 +11,6 @@ exports.fetchAllTopics = () => {
   // return db.query, return each row
   return db.query(queryString).then((sqlQueryReturnObject) => {
     // console.log(sqlQueryReturnObject)
-    console.log("<---- THIS RAN");
     return sqlQueryReturnObject;
   });
 };

@@ -1,6 +1,5 @@
 const db = require("../../db/connection"); // connect to db, for db.query(), from the pool
 
-// create function
 exports.fetchCommentsByID = (article_id) => {
   //      create query
   let myQuery = `
@@ -25,4 +24,13 @@ exports.fetchCommentsByID = (article_id) => {
   // console.log();
   // call on row funcction, .then() promise which return row from query
   return db.query(myQuery, [article_id]).then(({ rows }) => rows);
+};
+
+exports.pushCommentUsernameBoyID = (article_id, username, body) => {
+  // sql statement
+  let myQuery = `
+  SELECT * FROM comments
+  `;
+  //db quert
+  return db.query(myQuery).then(({ rows }) => rows);
 };

@@ -3,7 +3,10 @@ const {
   fetchArticleByID,
   fetchAllArticles,
 } = require("../models/articles.model");
-const { fetchCommentsByID } = require("../models/comments.model");
+const {
+  fetchCommentsByID,
+  pushCommentUsernameBoyID,
+} = require("../models/comments.model");
 
 // --------- topics ----------
 // gets all topics, next input for handling errors
@@ -54,6 +57,23 @@ exports.getCommentsByID = (req, res, next) => {
     .then((commentItem) => {
       // send the status code, along with the article
       res.status(200).send({ commentItem });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.postComments = (req, res, next) => {
+  const { article_id } = req.params;
+  const { username, body } = req.body; // body = the actial comment body
+  // call model function
+  console.log(article_id, username, body, "<-------------");
+
+  pushCommentUsernameBoyID(article_id, username, body)
+    .then((pushedComment) => {
+      console.log(pushedComment);
+      console.log(article_id, "<-------------");
+      res.status(200).send({ pushedComment });
     })
     .catch((err) => {
       next(err);

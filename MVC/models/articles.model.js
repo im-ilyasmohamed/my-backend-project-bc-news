@@ -26,14 +26,14 @@ exports.fetchArticleByID = (articleID) => {
   return db.query(queryString, [articleID]).then(({ rows }) => {
     return rows;
   });
-};
+};  
 
 exports.fetchAllArticles = () => {
   // create SQL Script
   const myQuery = `
     SELECT 
         articles.author,
-        articles.title,
+        articles.title,-
         articles.article_id,
         articles.body, 
         articles.topic,

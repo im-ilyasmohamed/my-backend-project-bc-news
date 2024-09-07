@@ -26,7 +26,7 @@ describe("endpoints", () => {
           });
         });
     });
-    test("200: returns article object by article id param input", () => {
+    test("200: returns article object by article article id param", () => {
       return request(app)
         .get("/api/articles/1")
         .expect(200)
@@ -107,6 +107,15 @@ describe("endpoints", () => {
             expect(eachItem).toHaveProperty("body", expect.any(String));
             expect(eachItem).toHaveProperty("article_id", expect.any(Number));
           });
+        });
+    });
+    test.only("200: returns an array of comments for specific article based on id param input", () => {
+      return request(app)
+        .post("/api/articles/1/comments")
+        .send({ username: "name1", body: "this is the comment" })
+        .expect(200)
+        .then(({body}) => {
+          console.log(body);
         });
     });
   });
