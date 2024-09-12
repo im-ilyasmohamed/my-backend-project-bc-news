@@ -74,12 +74,11 @@ describe("endpoints", () => {
         .get("/api/articles")
         .expect(200)
         .then(({ body }) => {
-          
           body.allArticles.forEach((eachItem) => {
             // test each value name, and output type
             expect(eachItem).toHaveProperty("author", expect.any(String));
             expect(eachItem).toHaveProperty("title", expect.any(String));
-            expect(eachItem).toHaveProperty("?column?", expect.any(Number)); // instead of article ID
+            expect(eachItem).toHaveProperty("article_id", expect.any(Number)); // instead of article ID
             expect(eachItem).toHaveProperty("body", expect.any(String));
             expect(eachItem).toHaveProperty("topic", expect.any(String));
             expect(eachItem).toHaveProperty("created_at", expect.any(String));
@@ -110,7 +109,7 @@ describe("endpoints", () => {
           });
         });
     });
-    test("200: returns an array of comments for specific article based on id param input", () => {
+    test("201: post a comment ", () => {
       return request(app)
         .post("/api/articles/1/comments")
         .send({ username: "rogersop", body: "this is the comment" })
