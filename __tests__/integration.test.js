@@ -71,14 +71,15 @@ describe("endpoints", () => {
     });
     test("200: returns an array of comments for specific article based on id param input", () => {
       return request(app)
-        .get("/api/articles/")
+        .get("/api/articles")
         .expect(200)
         .then(({ body }) => {
+          
           body.allArticles.forEach((eachItem) => {
             // test each value name, and output type
             expect(eachItem).toHaveProperty("author", expect.any(String));
             expect(eachItem).toHaveProperty("title", expect.any(String));
-            expect(eachItem).toHaveProperty("article_id", expect.any(Number));
+            expect(eachItem).toHaveProperty("?column?", expect.any(Number)); // instead of article ID
             expect(eachItem).toHaveProperty("body", expect.any(String));
             expect(eachItem).toHaveProperty("topic", expect.any(String));
             expect(eachItem).toHaveProperty("created_at", expect.any(String));
@@ -109,13 +110,35 @@ describe("endpoints", () => {
           });
         });
     });
-    test.only("200: returns an array of comments for specific article based on id param input", () => {
+    test("200: returns an array of comments for specific article based on id param input", () => {
       return request(app)
         .post("/api/articles/1/comments")
-        .send({ username: "name1", body: "this is the comment" })
-        .expect(200)
-        .then(({body}) => {
-          console.log(body);
+        .send({ username: "rogersop", body: "this is the comment" })
+        .expect(201)
+        .then(({ body }) => {
+          // post comment
+
+          expect(body.pushedComment).toHaveProperty(
+            "comment_id",
+            expect.any(Number)
+          );
+          expect(body.pushedComment).toHaveProperty("body", expect.any(String));
+          expect(body.pushedComment).toHaveProperty(
+            "article_id",
+            expect.any(Number)
+          );
+          expect(body.pushedComment).toHaveProperty(
+            "author",
+            expect.any(String)
+          );
+          expect(body.pushedComment).toHaveProperty(
+            "votes",
+            expect.any(Number)
+          );
+          expect(body.pushedComment).toHaveProperty(
+            "created_at",
+            expect.any(String)
+          );
         });
     });
   });
