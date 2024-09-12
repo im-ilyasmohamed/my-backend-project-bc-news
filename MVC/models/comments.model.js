@@ -13,8 +13,7 @@ exports.fetchCommentsByID = (article_id) => {
     FROM 
       comments
     WHERE 
-      article_id = $1
-  
+      article_id = $1;
   `;
 
   // basic error handling
@@ -27,10 +26,31 @@ exports.fetchCommentsByID = (article_id) => {
 };
 
 exports.pushCommentUsernameBoyID = (article_id, username, body) => {
+  // basic error handling
+  if (!article_id || !username || !body) {
+    return Promise.reject({
+      status: 400,
+      msg: "Missing required database fields",
+    });
+  }
+
+  // const createdAt = Date.now(); // for timestamp in ms
+
+  //console.log(article_id, username, body);
+
   // sql statement
   let myQuery = `
-  SELECT * FROM comments
+    INSERT INTO
+      comments (body, author, article_id)
+    VALUES
+      ($1, $2, $3)
+    RETURNING 
+      *;
   `;
+
   //db quert
-  return db.query(myQuery).then(({ rows }) => rows);
+  return db.query(myQuery, [body, username, article_id]).then((result) => {
+    // console.log(result, "rows here");
+    return result.rows[0];
+  });
 };

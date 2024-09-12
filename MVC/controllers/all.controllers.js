@@ -13,12 +13,12 @@ const {
 exports.getTopics = (req, res, next) => {
   fetchAllTopics()
     .then((topics) => {
-      res.status(200).send({ topics });
+      res.status(200).send({ topics }); //201 for post
     })
     .catch((err) => {
       next(err);
     });
-  //
+  // 
 };
 
 // --------- articles ----------
@@ -71,9 +71,9 @@ exports.postComments = (req, res, next) => {
 
   pushCommentUsernameBoyID(article_id, username, body)
     .then((pushedComment) => {
-      console.log(pushedComment);
-      console.log(article_id, "<-------------");
-      res.status(200).send({ pushedComment });
+    //  console.log(pushedComment);
+    //  console.log(article_id, "<-------------");
+      res.status(201).send({ pushedComment });
     })
     .catch((err) => {
       next(err);
