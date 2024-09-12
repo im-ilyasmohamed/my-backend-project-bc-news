@@ -74,7 +74,6 @@ describe("endpoints", () => {
         .get("/api/articles")
         .expect(200)
         .then(({ body }) => {
-          
           body.allArticles.forEach((eachItem) => {
             // test each value name, and output type
             expect(eachItem).toHaveProperty("author", expect.any(String));
@@ -141,7 +140,6 @@ describe("endpoints", () => {
           );
         });
     });
-    test("200: put, retruns " )
   });
 });
 
