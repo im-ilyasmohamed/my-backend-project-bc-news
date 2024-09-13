@@ -143,6 +143,110 @@ describe("endpoints", () => {
   });
 });
 
+// tests could be improved, e.g. done at different ranges etc, also do 1000 case, and case where wrong article_id for example 600 iS placed
+describe("Article Vote Increment", () => {
+  test("200: Successfully increments an article's vote by 1000 and returns the updated article with correct properties", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: 1000 })
+      .expect(200)
+      .then(({ body }) => {
+        //console.log(body.editecArticle[0], "body");
+        expect(body.editecArticle[0]).toHaveProperty(
+          "article_id",
+          expect.any(Number)
+        );
+        expect(body.editecArticle[0]).toHaveProperty(
+          "title",
+          expect.any(String)
+        );
+
+        expect(body.editecArticle[0]).toHaveProperty(
+          "topic",
+          expect.any(String)
+        );
+        expect(body.editecArticle[0]).toHaveProperty(
+          "author",
+          expect.any(String)
+        );
+        expect(body.editecArticle[0]).toHaveProperty(
+          "body",
+          expect.any(String)
+        );
+        expect(body.editecArticle[0]).toHaveProperty(
+          "created_at",
+          expect.any(String)
+        );
+        expect(body.editecArticle[0]).toHaveProperty(
+          "votes",
+          expect.any(Number)
+        );
+        expect(body.editecArticle[0].votes).toBe(1100); // hardcoded, check if votes incremented by one
+        expect(body.editecArticle[0]).toHaveProperty(
+          "votes",
+          expect.any(Number)
+        );
+        expect(body.editecArticle[0]).toHaveProperty(
+          "article_img_url",
+          expect.any(String)
+        );
+      });
+  });
+  test("200: Successfully decrement an article's vote by -100 and returns the updated article with correct properties, using a different article id to the first test", () => {
+    return request(app)
+      .patch("/api/articles/2")
+      .send({ inc_votes: -100 })
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.editecArticle[0]).toHaveProperty(
+          "article_id",
+          expect.any(Number)
+        );
+        expect(body.editecArticle[0]).toHaveProperty(
+          "title",
+          expect.any(String)
+        );
+
+        expect(body.editecArticle[0]).toHaveProperty(
+          "topic",
+          expect.any(String)
+        );
+        expect(body.editecArticle[0]).toHaveProperty(
+          "author",
+          expect.any(String)
+        );
+        expect(body.editecArticle[0]).toHaveProperty(
+          "body",
+          expect.any(String)
+        );
+        expect(body.editecArticle[0]).toHaveProperty(
+          "created_at",
+          expect.any(String)
+        );
+        expect(body.editecArticle[0]).toHaveProperty(
+          "votes",
+          expect.any(Number)
+        );
+        expect(body.editecArticle[0].votes).toBe(-100); // hardcoded, check if votes incremented by one
+        expect(body.editecArticle[0]).toHaveProperty(
+          "article_img_url",
+          expect.any(String)
+        );
+      });
+  });
+  // test cases could be improved, more cases
+  test("400: Unsuccesful increment of article due to passing in text rather than number", () => {
+    return request(app)
+      .patch("/api/articles/wronginput")
+      .send({ inc_votes: 1000 })
+      .expect(400)
+      .then((body) => {
+        //console.log(body);
+        // wrong article
+      });
+  });
+});
+
 describe("endpoints file ", () => {
   test("Should return a JSON object containing all available endpoints", () => {
     return request(app)
