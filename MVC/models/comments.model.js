@@ -54,3 +54,31 @@ exports.pushCommentUsernameBoyID = (article_id, username, body) => {
     return result.rows[0];
   });
 };
+
+exports.deleteCommentByCommentId = (comment_id) => {
+  let myQuery = `
+  DELETE
+  FROM
+    comments
+  WHERE
+    comment_id = $1
+  RETURNING 
+    *;
+`;
+  // basic error handling, could be improved, currently making sure comment id is a number
+  if (isNaN(comment_id)) {
+    return Promise.reject({
+      status: 404,
+      msg: "resource not found, invalid input",
+    });
+  }
+
+  //
+  return db.query(myQuery, [comment_id]).then(({ rows }) => {
+    //basic error handling
+    if (rows.length === 0) {
+      return Promise.reject({ status: 404, msg: "resource not found" });
+    }
+    return rows;
+  });
+};

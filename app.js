@@ -6,6 +6,7 @@ const {
   getAllArticles,
   postComments,
   putIncrementVoteUsingArticleID,
+  removeCommentByCommentId,
 } = require("./MVC/controllers/all.controllers"); // require in controller class
 const endpoints = require("./endpoints.json"); //require in static json file, showing list of endpoints for /api route
 
@@ -26,17 +27,12 @@ app.get("/api/topics", getTopics); //create api endpoint for /api/topics
 app.get("/api", (req, res) => {
   res.status(200).send(endpoints); // this will send endpoint.json file, in the body for integration test etc
 });
-
 app.get("/api/articles/:article_id", getArticleByID);
-
 app.get("/api/articles/", getAllArticles);
-
-app.get("/api/articles/:article_id/comments", getCommentsByID); // get
-
-app.post("/api/articles/:article_id/comments", postComments); // post
-
-app.patch("/api/articles/:article_id", putIncrementVoteUsingArticleID); // put
-
+app.get("/api/articles/:article_id/comments", getCommentsByID);
+app.post("/api/articles/:article_id/comments", postComments);
+app.patch("/api/articles/:article_id", putIncrementVoteUsingArticleID);
+app.delete("/api/comments/:comment_id", removeCommentByCommentId);
 // ----------------------------------------------------------
 
 // create endpoint for this, default for route '/'
