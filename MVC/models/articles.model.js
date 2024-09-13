@@ -33,9 +33,9 @@ exports.fetchAllArticles = () => {
     SELECT 
         articles.author,
         articles.title,
-        articles.article_id,
+        articles.article_id, 
         articles.body, 
-        articles.topic,
+        articles.topic, 
         articles.created_at,
         articles.votes,
         articles.article_img_url,
@@ -47,7 +47,14 @@ exports.fetchAllArticles = () => {
     ON
       articles.article_id = comments.article_id
     GROUP BY 
-        articles.article_id
+        articles.author,
+        articles.title,
+        articles.article_id,
+        articles.body, 
+        articles.topic,
+        articles.created_at,
+        articles.votes,
+        articles.article_img_url
     ORDER BY 
         created_at;
 `;
@@ -56,33 +63,7 @@ exports.fetchAllArticles = () => {
   //return script query
   return db
     .query(myQuery)
-    .then(({ rows }) => rows)
-    .catch((err) => err);
-};
-
-exports.editIncrementVoteUsingArticleID = (article_id, newVote) => {
-  // create SQL script
-  const myQuery = `
-  UPDATE 
-    articles
-  SET
-    votes = votes + $1
-  WHERE
-    article_id = $2
-  RETURNING *;
-  `;
-
-  // invalid param/id input, return 400 status
-  // could improve by checking database has article number e.g. article being above 600 should not count
-  if (isNaN(article_id)) {
-    return Promise.reject({ status: 400, msg: "invalid input" }); // attempt at error handling
-  }
-
-  // return script query
-  return db
-    .query(myQuery, [newVote, article_id])
     .then(({ rows }) => {
-      //console.log(rows);
       return rows;
     })
     .catch((err) => err);

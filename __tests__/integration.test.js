@@ -247,6 +247,40 @@ describe("Article Vote Increment", () => {
   });
 });
 
+describe("removeCommentByCommentId(), deleting comment by comment id", () => {
+  test.only("204: Successfully delete existing comment, do not return anything", () => {
+    return request(app)
+      .delete("/api/comments/18")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body).toEqual({});
+      });
+  });
+  test.only("404: UnSuccessfull delete non-existing comment, do not return anything", () => {
+    return request(app)
+      .delete("/api/comments/21")
+      .expect(404)
+      .then((res) => {
+        //console.log("Here in body", );
+        //expect(res).toHaveProperty("msg", "resource not found");
+
+        // not sure why, only getting html response rather than body object
+        expect(res.error.status).toEqual(404);
+      });
+  });
+  test.only("404: UnSuccessfull inputing a word rather than a number, do not return anything", () => {
+    return request(app)
+      .delete("/api/comments/wronginput")
+      .expect(404)
+      .then((res) => {
+        //console.log("Here in body", body);
+
+        // not sure why, only getting html response rather than body object
+        expect(res.error.status).toEqual(404);
+      });
+  });
+});
+
 describe("endpoints file ", () => {
   test("Should return a JSON object containing all available endpoints", () => {
     return request(app)

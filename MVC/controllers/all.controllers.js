@@ -7,6 +7,7 @@ const {
 const {
   fetchCommentsByID,
   pushCommentUsernameBoyID,
+  deleteCommentByCommentId,
 } = require("../models/comments.model");
 
 // --------- topics ----------
@@ -50,6 +51,21 @@ exports.getAllArticles = (req, res, next) => {
     });
 };
 
+exports.putIncrementVoteUsingArticleID = (req, res, next) => {
+  const { article_id } = req.params;
+  const { inc_votes } = req.body;
+
+  // console.log
+  //console.log("Edits Here", article_id, inc_votes);
+
+  // send status code and object
+  editIncrementVoteUsingArticleID(article_id, inc_votes)
+    .then((editecArticle) => {
+      res.status(200).send({ editecArticle });
+    })
+    .catch((err) => next(err));
+};
+
 // --------- comments ----------
 exports.getCommentsByID = (req, res, next) => {
   const { article_id } = req.params;
@@ -81,17 +97,12 @@ exports.postComments = (req, res, next) => {
     });
 };
 
-exports.putIncrementVoteUsingArticleID = (req, res, next) => {
-  const { article_id } = req.params;
-  const { inc_votes } = req.body;
-
-  // console.log
-  //console.log("Edits Here", article_id, inc_votes);
-
-  // send status code and object
-  editIncrementVoteUsingArticleID(article_id, inc_votes)
-    .then((editecArticle) => {
-      res.status(200).send({ editecArticle });
+exports.removeCommentByCommentId = (req, res, next) => {
+  const { comment_id } = req.params;
+  deleteCommentByCommentId(comment_id)
+    .then((deletedComment) => {
+      //console.log(deletedComment)
+      res.status(204).send({});
     })
     .catch((err) => next(err));
 };
