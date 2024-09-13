@@ -1,7 +1,8 @@
-const { fetchAllTopics } = require("../models/topics.models"); // import model
+const { fetchAllTopics } = require("../models/topics.models");
 const {
   fetchArticleByID,
   fetchAllArticles,
+  editIncrementVoteUsingArticleID,
 } = require("../models/articles.model");
 const {
   fetchCommentsByID,
@@ -18,7 +19,7 @@ exports.getTopics = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
-  // 
+  //
 };
 
 // --------- articles ----------
@@ -67,15 +68,30 @@ exports.postComments = (req, res, next) => {
   const { article_id } = req.params;
   const { username, body } = req.body; // body = the actial comment body
   // call model function
-  console.log(article_id, username, body, "<-------------");
+  //console.log(article_id, username, body, "<-------------");
 
   pushCommentUsernameBoyID(article_id, username, body)
     .then((pushedComment) => {
-    //  console.log(pushedComment);
-    //  console.log(article_id, "<-------------");
+      //  console.log(pushedComment);
+      //  console.log(article_id, "<-------------");
       res.status(201).send({ pushedComment });
     })
     .catch((err) => {
       next(err);
     });
+};
+
+exports.putIncrementVoteUsingArticleID = (req, res, next) => {
+  const { article_id } = req.params;
+  const { inc_votes } = req.body;
+
+  // console.log
+  //console.log("Edits Here", article_id, inc_votes);
+
+  // send status code and object
+  editIncrementVoteUsingArticleID(article_id, inc_votes)
+    .then((editecArticle) => {
+      res.status(200).send({ editecArticle });
+    })
+    .catch((err) => next(err));
 };

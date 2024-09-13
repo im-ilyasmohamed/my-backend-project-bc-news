@@ -26,8 +26,7 @@ exports.fetchArticleByID = (articleID) => {
   return db.query(queryString, [articleID]).then(({ rows }) => {
     return rows;
   });
-};  
-
+};
 exports.fetchAllArticles = () => {
   // create SQL Script
   const myQuery = `
@@ -57,7 +56,33 @@ exports.fetchAllArticles = () => {
   //return script query
   return db
     .query(myQuery)
+    .then(({ rows }) => rows)
+    .catch((err) => err);
+};
+
+exports.editIncrementVoteUsingArticleID = (article_id, newVote) => {
+  // create SQL script
+  const myQuery = `
+  UPDATE 
+    articles
+  SET
+    votes = votes + $1
+  WHERE
+    article_id = $2
+  RETURNING *;
+  `;
+
+  // invalid param/id input, return 400 status
+  // could improve by checking database has article number e.g. article being above 600 should not count
+  if (isNaN(article_id)) {
+    return Promise.reject({ status: 400, msg: "invalid input" }); // attempt at error handling
+  }
+
+  // return script query
+  return db
+    .query(myQuery, [newVote, article_id])
     .then(({ rows }) => {
+      //console.log(rows);
       return rows;
     })
     .catch((err) => err);
