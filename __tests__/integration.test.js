@@ -151,6 +151,7 @@ describe("Article Vote Increment", () => {
       .send({ inc_votes: 1000 })
       .expect(200)
       .then(({ body }) => {
+        //console.log(body);
         //console.log(body.editecArticle[0], "body");
         expect(body.editecArticle[0]).toHaveProperty(
           "article_id",
@@ -248,7 +249,7 @@ describe("Article Vote Increment", () => {
 });
 
 describe("removeCommentByCommentId(), deleting comment by comment id", () => {
-  test.only("204: Successfully delete existing comment, do not return anything", () => {
+  test("204: Successfully delete existing comment, do not return anything", () => {
     return request(app)
       .delete("/api/comments/18")
       .expect(204)
@@ -256,7 +257,7 @@ describe("removeCommentByCommentId(), deleting comment by comment id", () => {
         expect(body).toEqual({});
       });
   });
-  test.only("404: UnSuccessfull delete non-existing comment, do not return anything", () => {
+  test("404: UnSuccessfull delete non-existing comment, do not return anything", () => {
     return request(app)
       .delete("/api/comments/21")
       .expect(404)
@@ -268,7 +269,7 @@ describe("removeCommentByCommentId(), deleting comment by comment id", () => {
         expect(res.error.status).toEqual(404);
       });
   });
-  test.only("404: UnSuccessfull inputing a word rather than a number, do not return anything", () => {
+  test("404: UnSuccessfull inputing a word rather than a number, do not return anything", () => {
     return request(app)
       .delete("/api/comments/wronginput")
       .expect(404)
@@ -277,6 +278,25 @@ describe("removeCommentByCommentId(), deleting comment by comment id", () => {
 
         // not sure why, only getting html response rather than body object
         expect(res.error.status).toEqual(404);
+      });
+  });
+});
+
+// REQUIRES MORE TESTING
+// REQUIRES MORE TESTING
+// REQUIRES MORE TESTING
+// REQUIRES MORE TESTING
+describe("", () => {
+  test("200 - okay", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        body.allUsers.forEach((userItem) => {
+          expect(userItem).toHaveProperty("username", expect.any(String));
+          expect(userItem).toHaveProperty("name", expect.any(String));
+          expect(userItem).toHaveProperty("avatar_url", expect.any(String));
+        });
       });
   });
 });
