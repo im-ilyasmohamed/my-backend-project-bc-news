@@ -282,6 +282,25 @@ describe("removeCommentByCommentId(), deleting comment by comment id", () => {
   });
 });
 
+// REQUIRES MORE TESTING
+// REQUIRES MORE TESTING
+// REQUIRES MORE TESTING
+// REQUIRES MORE TESTING
+describe("", () => {
+  test("200 - okay", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        body.allUsers.forEach((userItem) => {
+          expect(userItem).toHaveProperty("username", expect.any(String));
+          expect(userItem).toHaveProperty("name", expect.any(String));
+          expect(userItem).toHaveProperty("avatar_url", expect.any(String));
+        });
+      });
+  });
+});
+
 describe("endpoints file ", () => {
   test("Should return a JSON object containing all available endpoints", () => {
     return request(app)
