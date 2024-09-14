@@ -1,7 +1,7 @@
 const db = require("../../db/connection"); // connect to db, for db.query(), from the pool
 
 exports.fetchCommentsByID = (article_id) => {
-  //      create query
+  // SQL query
   let myQuery = `
     SELECT 
       comment_id,
@@ -22,7 +22,13 @@ exports.fetchCommentsByID = (article_id) => {
   }
   // console.log();
   // call on row funcction, .then() promise which return row from query
-  return db.query(myQuery, [article_id]).then(({ rows }) => rows);
+  return db
+    .query(myQuery, [article_id])
+    .then(({ rows }) => rows)
+    .catch((err) => {
+      console.error("Database query error:", err);
+      return Promise.reject({ status: 500, msg: "Internal Server Error" });
+    });
 };
 
 exports.pushCommentUsernameBoyID = (article_id, username, body) => {
@@ -38,7 +44,7 @@ exports.pushCommentUsernameBoyID = (article_id, username, body) => {
 
   //console.log(article_id, username, body);
 
-  // sql statement
+  // SQL query
   let myQuery = `
     INSERT INTO
       comments (body, author, article_id)
@@ -49,13 +55,20 @@ exports.pushCommentUsernameBoyID = (article_id, username, body) => {
   `;
 
   //db quert
-  return db.query(myQuery, [body, username, article_id]).then((result) => {
-    // console.log(result, "rows here");
-    return result.rows[0];
-  });
+  return db
+    .query(myQuery, [body, username, article_id])
+    .then((result) => {
+      // console.log(result, "rows here");
+      return result.rows[0];
+    })
+    .catch((err) => {
+      console.error("Database query error:", err);
+      return Promise.reject({ status: 500, msg: "Internal Server Error" });
+    });
 };
 
 exports.deleteCommentByCommentId = (comment_id) => {
+  // SQL query
   let myQuery = `
   DELETE
   FROM
@@ -74,11 +87,17 @@ exports.deleteCommentByCommentId = (comment_id) => {
   }
 
   //
-  return db.query(myQuery, [comment_id]).then(({ rows }) => {
-    //basic error handling
-    if (rows.length === 0) {
-      return Promise.reject({ status: 404, msg: "resource not found" });
-    }
-    return rows;
-  });
+  return db
+    .query(myQuery, [comment_id])
+    .then(({ rows }) => {
+      //basic error handling
+      if (rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "resource not found" });
+      }
+      return rows;
+    })
+    .catch((err) => {
+      console.error("Database query error:", err);
+      return Promise.reject({ status: 500, msg: "Internal Server Error" });
+    });
 };

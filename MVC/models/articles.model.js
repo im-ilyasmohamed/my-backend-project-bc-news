@@ -1,7 +1,7 @@
 const db = require("../../db/connection"); // connect to the database
 
 exports.fetchArticleByID = (articleID) => {
-  // query string where id is $1
+  // SQL query where id is $1
   let queryString = `
     SELECT 
         author,
@@ -23,12 +23,18 @@ exports.fetchArticleByID = (articleID) => {
   }
 
   // query db, with params (queryString, $1)
-  return db.query(queryString, [articleID]).then(({ rows }) => {
-    return rows;
-  });
+  return db
+    .query(queryString, [articleID])
+    .then(({ rows }) => {
+      return rows;
+    })
+    .catch((err) => {
+      console.error("Database query error:", err);
+      return Promise.reject({ status: 500, msg: "Internal Server Error" });
+    });
 };
 exports.fetchAllArticles = () => {
-  // create SQL Script
+  // SQL query
   const myQuery = `
     SELECT 
         articles.author,
@@ -66,11 +72,14 @@ exports.fetchAllArticles = () => {
     .then(({ rows }) => {
       return rows;
     })
-    .catch((err) => err);
+    .catch((err) => {
+      console.error("Database query error:", err);
+      return Promise.reject({ status: 500, msg: "Internal Server Error" });
+    });
 };
 
 exports.editIncrementVoteUsingArticleID = (article_id, newVote) => {
-  // create SQL script
+  // SQL query
   const myQuery = `
   UPDATE 
     articles
@@ -94,5 +103,57 @@ exports.editIncrementVoteUsingArticleID = (article_id, newVote) => {
       //console.log(rows);
       return rows;
     })
-    .catch((err) => err);
+    .catch((err) => {
+      console.error("Database query error:", err);
+      return Promise.reject({ status: 500, msg: "Internal Server Error" });
+    });
+};
+
+exports.fetchArticlesSortAndOrder = (sort_by, order) => {
+  // Validate sort_by param to prevent SQL injection
+  const validColumns = [
+    "author",
+    "title",
+    "article_id",
+    "topic",
+    "created_at",
+    "votes",
+    "comment_count",
+  ];
+  if (!validColumns.includes(sort_by)) {
+    return Promise.reject({ status: 400, msg: "Invalid sort column" });
+  }
+
+  // Validate order
+  const validOrder = ["asc", "desc"];
+  if (!validOrder.includes(order)) {
+    return Promise.reject({ status: 400, msg: "Invalid order" });
+  }
+
+  // SQL query
+  // had to use string literals as it would not let me use $1, as it cant be used on sortby
+  const query = `
+    SELECT 
+      articles.*,
+      COUNT(comments.comment_id) AS comment_count
+    FROM 
+      articles
+    LEFT JOIN
+      comments ON articles.article_id = comments.article_id
+    GROUP BY
+      articles.article_id
+    ORDER BY
+    ${sort_by} ${order}
+  `;
+
+  // Execute query and return results
+  return db
+    .query(query)
+    .then(({ rows }) => {
+      return rows;
+    })
+    .catch((err) => {
+      console.error("Database query error:", err);
+      return Promise.reject({ status: 500, msg: "Internal Server Error" });
+    });
 };

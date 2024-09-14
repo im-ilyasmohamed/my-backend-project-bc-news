@@ -5,6 +5,7 @@ const app = require("../app"); // request(app)
 const request = require("supertest"); // http client, for connecting to the surver
 const { forEach } = require("../db/data/test-data/articles");
 const { expect } = require("@jest/globals");
+const { toBeSorted } = require("jest-sorted"); // for the sorting queries, api point 11+
 beforeAll(() => {
   return seed(data);
 }); // before all seed the data for my test
@@ -302,16 +303,208 @@ describe("", () => {
   });
 });
 
-describe("GET articles by sort_by and order", () => {
-  test("", () => {
+// TEST COMPLETED 
+describe.only("GET articles by sort_by and order", () => {
+  test("200: Recieved articles based on query url, sorted by time created at and in ascending order", () => {
+    // sort_by = created_at, order = asc
     return request(app)
       .get("/api/articles?sort_by=created_at&order=asc")
       .expect(200)
-      .then((tempBody) => {
-        console.log(tempBody);
-      });
+      .then(({ body }) => {
+        // jest sorting function, ascending
+        expect(body.allSortedArticles).toBeSorted((a, b) => {
+          return new Date(a.created_at) - new Date(b.created_at);
+        });
 
-    console.log(tempBody);
+        // check if properties exist in object, within array
+        body.allSortedArticles.forEach((articleItem) => {
+          expect(articleItem).toHaveProperty("article_id", expect.any(Number));
+          expect(articleItem).toHaveProperty("title", expect.any(String));
+          expect(articleItem).toHaveProperty("topic", expect.any(String));
+          expect(articleItem).toHaveProperty("author", expect.any(String));
+          expect(articleItem).toHaveProperty("body", expect.any(String));
+          expect(articleItem).toHaveProperty("created_at", expect.any(String));
+          expect(articleItem).toHaveProperty("votes", expect.any(Number));
+          expect(articleItem).toHaveProperty(
+            "article_img_url",
+            expect.any(String)
+          );
+          expect(articleItem).toHaveProperty(
+            "comment_count",
+            expect.any(String)
+          );
+        });
+      });
+  });
+  test("200: Recieved articles based on query url, sorted by article id at and in desending order order", () => {
+    // sort_by = created_at, order = asc
+    return request(app)
+      .get("/api/articles?sort_by=article_id&order=desc")
+      .expect(200)
+      .then(({ body }) => {
+        // jest sorting function, descending
+        expect(body.allSortedArticles).toBeSorted((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+
+        body.allSortedArticles.forEach((articleItem) => {
+          expect(articleItem).toHaveProperty("article_id", expect.any(Number));
+          expect(articleItem).toHaveProperty("title", expect.any(String));
+          expect(articleItem).toHaveProperty("topic", expect.any(String));
+          expect(articleItem).toHaveProperty("author", expect.any(String));
+          expect(articleItem).toHaveProperty("body", expect.any(String));
+          expect(articleItem).toHaveProperty("created_at", expect.any(String));
+          expect(articleItem).toHaveProperty("votes", expect.any(Number));
+          expect(articleItem).toHaveProperty(
+            "article_img_url",
+            expect.any(String)
+          );
+          expect(articleItem).toHaveProperty(
+            "comment_count",
+            expect.any(String)
+          );
+        });
+      });
+  });
+  test("200: Recieved articles based on query url, sorted by time created (by default) at and explicit descending order", () => {
+    // default descending, explicit created at
+    return request(app)
+      .get("/api/articles?order=desc")
+      .expect(200)
+      .then(({ body }) => {
+        // jest sorting function, ascending
+        expect(body.allSortedArticles).toBeSorted((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+
+        // check if properties exist in object, within array
+        body.allSortedArticles.forEach((articleItem) => {
+          expect(articleItem).toHaveProperty("article_id", expect.any(Number));
+          expect(articleItem).toHaveProperty("title", expect.any(String));
+          expect(articleItem).toHaveProperty("topic", expect.any(String));
+          expect(articleItem).toHaveProperty("author", expect.any(String));
+          expect(articleItem).toHaveProperty("body", expect.any(String));
+          expect(articleItem).toHaveProperty("created_at", expect.any(String));
+          expect(articleItem).toHaveProperty("votes", expect.any(Number));
+          expect(articleItem).toHaveProperty(
+            "article_img_url",
+            expect.any(String)
+          );
+          expect(articleItem).toHaveProperty(
+            "comment_count",
+            expect.any(String)
+          );
+        });
+      });
+  });
+  test("200: Recieved articles based on query url, sorted by time created at and defaults descending order", () => {
+    // default descending, explicit created at
+    return request(app)
+      .get("/api/articles?sort_by=created_at")
+      .expect(200)
+      .then(({ body }) => {
+        // jest sorting function, ascending
+        expect(body.allSortedArticles).toBeSorted((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+
+        // check if properties exist in object, within array
+        body.allSortedArticles.forEach((articleItem) => {
+          expect(articleItem).toHaveProperty("article_id", expect.any(Number));
+          expect(articleItem).toHaveProperty("title", expect.any(String));
+          expect(articleItem).toHaveProperty("topic", expect.any(String));
+          expect(articleItem).toHaveProperty("author", expect.any(String));
+          expect(articleItem).toHaveProperty("body", expect.any(String));
+          expect(articleItem).toHaveProperty("created_at", expect.any(String));
+          expect(articleItem).toHaveProperty("votes", expect.any(Number));
+          expect(articleItem).toHaveProperty(
+            "article_img_url",
+            expect.any(String)
+          );
+          expect(articleItem).toHaveProperty(
+            "comment_count",
+            expect.any(String)
+          );
+        });
+      });
+  });
+  test("200: Recieved articles based on query url, sorted by votes and defaults descending order", () => {
+    // default descending, explicit created at
+    return request(app)
+      .get("/api/articles?sort_by=votes")
+      .expect(200)
+      .then(({ body }) => {
+        // jest sorting function, ascending
+        expect(body.allSortedArticles).toBeSortedBy("votes", {
+          descending: true,
+        });
+        // check if properties exist in object, within array
+        body.allSortedArticles.forEach((articleItem) => {
+          expect(articleItem).toHaveProperty("article_id", expect.any(Number));
+          expect(articleItem).toHaveProperty("title", expect.any(String));
+          expect(articleItem).toHaveProperty("topic", expect.any(String));
+          expect(articleItem).toHaveProperty("author", expect.any(String));
+          expect(articleItem).toHaveProperty("body", expect.any(String));
+          expect(articleItem).toHaveProperty("created_at", expect.any(String));
+          expect(articleItem).toHaveProperty("votes", expect.any(Number));
+          expect(articleItem).toHaveProperty(
+            "article_img_url",
+            expect.any(String)
+          );
+          expect(articleItem).toHaveProperty(
+            "comment_count",
+            expect.any(String)
+          );
+        });
+      });
+  });
+  test("200: Recieved articles based on query url, sorted by votes and defaults descending order", () => {
+    // default descending, explicit created at
+    return request(app)
+      .get("/api/articles?sort_by=author")
+      .expect(200)
+      .then(({ body }) => {
+        // jest sorting function, ascending
+        expect(body.allSortedArticles).toBeSortedBy("author", {
+          descending: true,
+        });
+        // check if properties exist in object, within array
+        body.allSortedArticles.forEach((articleItem) => {
+          expect(articleItem).toHaveProperty("article_id", expect.any(Number));
+          expect(articleItem).toHaveProperty("title", expect.any(String));
+          expect(articleItem).toHaveProperty("topic", expect.any(String));
+          expect(articleItem).toHaveProperty("author", expect.any(String));
+          expect(articleItem).toHaveProperty("body", expect.any(String));
+          expect(articleItem).toHaveProperty("created_at", expect.any(String));
+          expect(articleItem).toHaveProperty("votes", expect.any(Number));
+          expect(articleItem).toHaveProperty(
+            "article_img_url",
+            expect.any(String)
+          );
+          expect(articleItem).toHaveProperty(
+            "comment_count",
+            expect.any(String)
+          );
+        });
+      });
+  });
+  test("400: Request bad as author spelt wrong, prevents SQL injection as only set amount of inputs permitted", () => {
+    // default descending, explicit created at
+    return request(app)
+      .get("/api/articles?sort_by=autho")
+      .expect(400)
+      .then(({ body }) => {
+        // expect 400 for wrong input
+      });
+  });
+  test("400: Request bad as desc spelt wrong, prevents SQL injection as only set amount of inputs permitted", () => {
+    // default descending, explicit created at
+    return request(app)
+      .get("/api/articles?sort_by=author&order=des")
+      .expect(400)
+      .then(({ body }) => {
+        // expect 400 for wrong input
+      });
   });
 });
 

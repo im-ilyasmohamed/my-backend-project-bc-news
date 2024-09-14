@@ -2,9 +2,7 @@ const db = require("../../db/connection");
 
 // No param inpur
 exports.fetchAllUsers = () => {
-  // error handling
-
-  // query
+  // SQL query
   let mrQuery = `
   SELECT
     *
@@ -19,6 +17,7 @@ exports.fetchAllUsers = () => {
       return rows;
     })
     .catch((err) => {
+      console.error("Database query error:", err);
       // only send correct status code
       // BUT DOES NOT SEND msg not sure why?
       return Promise.reject({

@@ -3,6 +3,7 @@ const {
   fetchArticleByID,
   fetchAllArticles,
   editIncrementVoteUsingArticleID,
+  fetchArticlesSortAndOrder,
 } = require("../models/articles.model");
 const {
   fetchCommentsByID,
@@ -42,13 +43,37 @@ exports.getArticleByID = (req, res, next) => {
 
 // get all articles
 exports.getAllArticles = (req, res, next) => {
-  // get the data print it
+  // 1)
+  // return getArticlesSortAndOrder() function below. if req.query exist
+  const { sort_by, order } = req.query;
+  if (sort_by || order) {
+    // if sort_by or order is defined, then it calls the function below
+    return this.getArticlesSortAndOrder(req, res, next);
+  }
+
+  // 2)
+  // default function behaviour, if no queries
   fetchAllArticles()
     .then((allArticles) => {
       res.status(200).send({ allArticles });
     })
     .catch((err) => {
       next(err); //
+    });
+};
+
+// function to sort
+// cant be called directly must be called by function above!
+exports.getArticlesSortAndOrder = (req, res, next) => {
+  // reverts to explicirt default values, if undefined
+  const { sort_by = "created_at", order = "desc" } = req.query; // Added default values
+
+  fetchArticlesSortAndOrder(sort_by, order)
+    .then((allSortedArticles) => {
+      res.status(200).send({ allSortedArticles });
+    })
+    .catch((err) => {
+      next(err);
     });
 };
 
@@ -65,14 +90,6 @@ exports.putIncrementVoteUsingArticleID = (req, res, next) => {
       res.status(200).send({ editecArticle });
     })
     .catch((err) => next(err));
-};
-
-exports.getArticlesSortAndOrder = (req, res, next) => {
-  // const - sort_by
-  // const - order
-  //
-  // call function 
-
 };
 
 // --------- comments ----------
