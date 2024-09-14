@@ -4,6 +4,7 @@ const {
   fetchAllArticles,
   editIncrementVoteUsingArticleID,
   fetchArticlesSortAndOrder,
+  fetchAllArticlesQueryTopic,
 } = require("../models/articles.model");
 const {
   fetchCommentsByID,
@@ -48,10 +49,17 @@ exports.getAllArticles = (req, res, next) => {
   const { sort_by, order } = req.query;
   if (sort_by || order) {
     // if sort_by or order is defined, then it calls the function below
-    return this.getArticlesSortAndOrder(req, res, next);
+    return this.getAllArticlesSortAndOrder(req, res, next);
   }
 
   // 2)
+  // return getAllArticlesQueryTopic() if quert exists
+  const { topic } = req.query;
+  if (topic) {
+    return this.getAllArticlesQueryTopic(req, res, next);
+  }
+
+  // 3)
   // default function behaviour, if no queries
   fetchAllArticles()
     .then((allArticles) => {
@@ -62,9 +70,20 @@ exports.getAllArticles = (req, res, next) => {
     });
 };
 
+exports.getAllArticlesQueryTopic = (req, res, next) => {
+  const { topic } = req.query;
+  fetchAllArticlesQueryTopic(topic)
+    .then((articlesByTopic) => {
+      res.status(200).send({ articlesByTopic});
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
 // function to sort
 // cant be called directly must be called by function above!
-exports.getArticlesSortAndOrder = (req, res, next) => {
+exports.getAllArticlesSortAndOrder = (req, res, next) => {
   // reverts to explicirt default values, if undefined
   const { sort_by = "created_at", order = "desc" } = req.query; // Added default values
 

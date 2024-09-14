@@ -508,6 +508,61 @@ describe("GET articles by sort_by and order", () => {
   });
 });
 
+// TEST COMPLETE - 3 TESTS
+describe("GET articles, query by topic", () => {
+  // correct input for topic
+  test("200: get article topics which have mitch as topic", () => {
+    return request(app)
+      .get("/api/articles/?topic=mitch")
+      .expect(200)
+      .then(({ body }) => {
+        body.articlesByTopic.forEach((articleItem) => {
+          expect(articleItem).toHaveProperty("article_id", expect.any(Number));
+          expect(articleItem).toHaveProperty("title", expect.any(String));
+          expect(articleItem).toHaveProperty("topic", "mitch"); // make sure topic = mitch
+          expect(articleItem).toHaveProperty("author", expect.any(String));
+          expect(articleItem).toHaveProperty("body", expect.any(String));
+          expect(articleItem).toHaveProperty("created_at", expect.any(String));
+          expect(articleItem).toHaveProperty("votes", expect.any(Number));
+          expect(articleItem).toHaveProperty(
+            "article_img_url",
+            expect.any(String)
+          );
+        });
+      });
+  });
+  test("200: get article topics which have cats as topic", () => {
+    return request(app)
+      .get("/api/articles/?topic=cats")
+      .expect(200)
+      .then(({ body }) => {
+        body.articlesByTopic.forEach((articleItem) => {
+          expect(articleItem).toHaveProperty("article_id", expect.any(Number));
+          expect(articleItem).toHaveProperty("title", expect.any(String));
+          expect(articleItem).toHaveProperty("topic", "cats"); // make sure topic = cats
+          expect(articleItem).toHaveProperty("author", expect.any(String));
+          expect(articleItem).toHaveProperty("body", expect.any(String));
+          expect(articleItem).toHaveProperty("created_at", expect.any(String));
+          expect(articleItem).toHaveProperty("votes", expect.any(Number));
+          expect(articleItem).toHaveProperty(
+            "article_img_url",
+            expect.any(String)
+          );
+        });
+      });
+  });
+  // wrong input for topic, misspelling of cat
+  test("200: get article topics which have paper as topic", () => {
+    return request(app)
+      .get("/api/articles/?topic=cat")
+      .expect(400)
+      .then(({ body }) => {
+        // mispelt cat and got 400 code
+      });
+  });
+  // If no topic, get all topics, already covered in cases for /api/article
+});
+
 describe("endpoints file ", () => {
   test("Should return a JSON object containing all available endpoints", () => {
     return request(app)
