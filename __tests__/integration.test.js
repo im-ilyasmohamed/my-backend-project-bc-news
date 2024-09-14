@@ -271,7 +271,7 @@ describe("removeCommentByCommentId(), deleting comment by comment id", () => {
         expect(res.error.status).toEqual(404);
       });
   });
-  test("404: UnSuccessfull inputing a word rather than a number, do not return anything", () => {
+  test.only("404: UnSuccessfull inputing a word rather than a number, do not return anything", () => {
     return request(app)
       .delete("/api/comments/wronginput")
       .expect(404)
@@ -304,7 +304,7 @@ describe("", () => {
 });
 
 // TEST COMPLETED - 8 CASES
-describe.only("GET articles by sort_by and order", () => {
+describe("GET articles by sort_by and order", () => {
   test("200: Recieved articles based on query url, sorted by time created at and in ascending order", () => {
     // sort_by = created_at, order = asc
     return request(app)
