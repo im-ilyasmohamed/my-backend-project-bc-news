@@ -59,7 +59,7 @@ exports.deleteCommentByCommentId = (comment_id) => {
   let myQuery = `
   DELETE
   FROM
-    comments
+    comments 
   WHERE
     comment_id = $1
   RETURNING 
