@@ -9,6 +9,7 @@ const {
   pushCommentUsernameBoyID,
   deleteCommentByCommentId,
 } = require("../models/comments.model");
+const { fetchAllUsers } = require("../models/users");
 
 // --------- topics ----------
 // gets all topics, next input for handling errors
@@ -105,4 +106,18 @@ exports.removeCommentByCommentId = (req, res, next) => {
       res.status(204).send({});
     })
     .catch((err) => next(err));
+};
+
+// --------- users ----------
+exports.getAllUsers = (req, res, next) => {
+  // call model function to get data
+  // then
+  // response good or bad
+  fetchAllUsers()
+    .then((allUsers) => {
+      res.send({ allUsers });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
