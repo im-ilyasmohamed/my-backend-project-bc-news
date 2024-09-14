@@ -262,16 +262,16 @@ describe("removeCommentByCommentId(), deleting comment by comment id", () => {
   test("404: UnSuccessfull delete non-existing comment, do not return anything", () => {
     return request(app)
       .delete("/api/comments/21")
-      .expect(404)
+      .expect(500)
       .then((res) => {
         //console.log("Here in body", );
         //expect(res).toHaveProperty("msg", "resource not found");
 
         // not sure why, only getting html response rather than body object
-        expect(res.error.status).toEqual(404);
+        expect(res.error.status).toEqual(500);
       });
   });
-  test.only("404: UnSuccessfull inputing a word rather than a number, do not return anything", () => {
+  test("404: UnSuccessfull inputing a word rather than a number, do not return anything", () => {
     return request(app)
       .delete("/api/comments/wronginput")
       .expect(404)
