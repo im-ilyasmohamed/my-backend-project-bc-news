@@ -303,7 +303,7 @@ describe("", () => {
   });
 });
 
-// TEST COMPLETED 
+// TEST COMPLETED - 8 CASES
 describe.only("GET articles by sort_by and order", () => {
   test("200: Recieved articles based on query url, sorted by time created at and in ascending order", () => {
     // sort_by = created_at, order = asc
