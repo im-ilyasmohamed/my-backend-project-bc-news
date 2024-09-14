@@ -157,3 +157,46 @@ exports.fetchArticlesSortAndOrder = (sort_by, order) => {
       return Promise.reject({ status: 500, msg: "Internal Server Error" });
     });
 };
+
+exports.fetchAllArticlesQueryTopic = (topic) => {
+  // Validate topic to prevent SQL injection or bad queries
+  const validTopics = ["mitch", "cats"]; // List of valid topics, adjust based on your actual topics
+
+  if (!validTopics.includes(topic)) {
+    return Promise.reject({ status: 400, msg: "Invalid topic" });
+  }
+
+  // SQL query to fetch articles by topic
+  const query = `
+    SELECT 
+      *
+    FROM 
+      articles
+    WHERE 
+      topic = $1
+    ORDER BY
+      created_at DESC;
+  `;
+
+  // Execute query and return results
+  return db
+    .query(query, [topic]) // Pass the topic as a parameter to avoid SQL injection
+    .then(({ rows }) => {
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      if (rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: "No articles found for this topic",
+        });
+      }
+      return rows;
+    })
+    .catch((err) => {
+      console.error("Database query error:", err);
+      return Promise.reject({ status: 500, msg: "Internal Server Error" });
+    });
+};

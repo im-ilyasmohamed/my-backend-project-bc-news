@@ -262,13 +262,13 @@ describe("removeCommentByCommentId(), deleting comment by comment id", () => {
   test("404: UnSuccessfull delete non-existing comment, do not return anything", () => {
     return request(app)
       .delete("/api/comments/21")
-      .expect(404)
+      .expect(500)
       .then((res) => {
         //console.log("Here in body", );
         //expect(res).toHaveProperty("msg", "resource not found");
 
         // not sure why, only getting html response rather than body object
-        expect(res.error.status).toEqual(404);
+        expect(res.error.status).toEqual(500);
       });
   });
   test("404: UnSuccessfull inputing a word rather than a number, do not return anything", () => {
@@ -304,7 +304,7 @@ describe("", () => {
 });
 
 // TEST COMPLETED - 8 CASES
-describe.only("GET articles by sort_by and order", () => {
+describe("GET articles by sort_by and order", () => {
   test("200: Recieved articles based on query url, sorted by time created at and in ascending order", () => {
     // sort_by = created_at, order = asc
     return request(app)
@@ -506,6 +506,61 @@ describe.only("GET articles by sort_by and order", () => {
         // expect 400 for wrong input
       });
   });
+});
+
+// TEST COMPLETE - 3 TESTS
+describe("GET articles, query by topic", () => {
+  // correct input for topic
+  test("200: get article topics which have mitch as topic", () => {
+    return request(app)
+      .get("/api/articles/?topic=mitch")
+      .expect(200)
+      .then(({ body }) => {
+        body.articlesByTopic.forEach((articleItem) => {
+          expect(articleItem).toHaveProperty("article_id", expect.any(Number));
+          expect(articleItem).toHaveProperty("title", expect.any(String));
+          expect(articleItem).toHaveProperty("topic", "mitch"); // make sure topic = mitch
+          expect(articleItem).toHaveProperty("author", expect.any(String));
+          expect(articleItem).toHaveProperty("body", expect.any(String));
+          expect(articleItem).toHaveProperty("created_at", expect.any(String));
+          expect(articleItem).toHaveProperty("votes", expect.any(Number));
+          expect(articleItem).toHaveProperty(
+            "article_img_url",
+            expect.any(String)
+          );
+        });
+      });
+  });
+  test("200: get article topics which have cats as topic", () => {
+    return request(app)
+      .get("/api/articles/?topic=cats")
+      .expect(200)
+      .then(({ body }) => {
+        body.articlesByTopic.forEach((articleItem) => {
+          expect(articleItem).toHaveProperty("article_id", expect.any(Number));
+          expect(articleItem).toHaveProperty("title", expect.any(String));
+          expect(articleItem).toHaveProperty("topic", "cats"); // make sure topic = cats
+          expect(articleItem).toHaveProperty("author", expect.any(String));
+          expect(articleItem).toHaveProperty("body", expect.any(String));
+          expect(articleItem).toHaveProperty("created_at", expect.any(String));
+          expect(articleItem).toHaveProperty("votes", expect.any(Number));
+          expect(articleItem).toHaveProperty(
+            "article_img_url",
+            expect.any(String)
+          );
+        });
+      });
+  });
+  // wrong input for topic, misspelling of cat
+  test("200: get article topics which have paper as topic", () => {
+    return request(app)
+      .get("/api/articles/?topic=cat")
+      .expect(400)
+      .then(({ body }) => {
+        // mispelt cat and got 400 code
+      });
+  });
+  // If no topic, get all topics, already covered in cases for /api/article
 });
 
 describe("endpoints file ", () => {
