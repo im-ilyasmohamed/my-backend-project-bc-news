@@ -243,6 +243,7 @@ describe("Article Vote Increment", () => {
       .then((body) => {
         //console.log(body);
         // wrong article
+        // still works
       });
   });
 });
