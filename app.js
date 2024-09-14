@@ -8,6 +8,7 @@ const {
   putIncrementVoteUsingArticleID,
   removeCommentByCommentId,
   getAllUsers,
+  getArticlesSortAndOrder,
 } = require("./MVC/controllers/all.controllers"); // require in controller class
 const endpoints = require("./endpoints.json"); //require in static json file, showing list of endpoints for /api route
 
@@ -28,6 +29,7 @@ app.get("/api/articles/", getAllArticles);
 app.get("/api/articles/:article_id/comments", getCommentsByID);
 app.post("/api/articles/:article_id/comments", postComments);
 app.patch("/api/articles/:article_id", putIncrementVoteUsingArticleID);
+app.get("/api/articles?sort_by=title&order=asc", getArticlesSortAndOrder)
 app.delete("/api/comments/:comment_id", removeCommentByCommentId);
 app.get("/api/users", getAllUsers);
 app.get("/api", (req, res) => {

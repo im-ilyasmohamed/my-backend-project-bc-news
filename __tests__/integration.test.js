@@ -302,6 +302,19 @@ describe("", () => {
   });
 });
 
+describe("GET articles by sort_by and order", () => {
+  test("", () => {
+    return request(app)
+      .get("/api/articles?sort_by=created_at&order=asc")
+      .expect(200)
+      .then((tempBody) => {
+        console.log(tempBody);
+      });
+
+    console.log(tempBody);
+  });
+});
+
 describe("endpoints file ", () => {
   test("Should return a JSON object containing all available endpoints", () => {
     return request(app)

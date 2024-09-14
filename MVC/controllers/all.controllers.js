@@ -67,6 +67,14 @@ exports.putIncrementVoteUsingArticleID = (req, res, next) => {
     .catch((err) => next(err));
 };
 
+exports.getArticlesSortAndOrder = (req, res, next) => {
+  // const - sort_by
+  // const - order
+  //
+  // call function 
+
+};
+
 // --------- comments ----------
 exports.getCommentsByID = (req, res, next) => {
   const { article_id } = req.params;
