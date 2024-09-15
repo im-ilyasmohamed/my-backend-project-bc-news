@@ -2,7 +2,8 @@ const db = require("../../db/connection"); // connect to db, for db.query(), fro
 
 exports.fetchCommentsByID = (article_id) => {
   // Sqql injection prevention
-  if (article_id === undefined || article_id === "" || !isNaN(article_id)) {
+  // || !isNaN(article_id) - SQL injection prevention, put into line below
+  if (article_id === undefined || article_id === "") {
     return Promise.reject({ status: 400, msg: "invalid input" });
   }
 
