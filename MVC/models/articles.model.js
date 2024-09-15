@@ -118,7 +118,10 @@ exports.editIncrementVoteUsingArticleID = (article_id, newVote) => {
   }
   // Check if newVote is a valid number
   if (isNaN(Number(newVote))) {
-    return Promise.reject({ status: 400, msg: "Invalid input: newVote must be a number" });
+    return Promise.reject({
+      status: 400,
+      msg: "Invalid input: newVote must be a number",
+    });
   }
 
   // SQL query
@@ -156,6 +159,8 @@ exports.editIncrementVoteUsingArticleID = (article_id, newVote) => {
     });
 };
 
+// Especialy important to prevent SQL injection when using string literals i.e. concat
+// RISK OF SQL INJECTION
 exports.fetchArticlesSortAndOrder = (sort_by, order) => {
   // Validate sort_by param to prevent SQL injection
   const validColumns = [

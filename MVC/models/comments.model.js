@@ -1,10 +1,13 @@
 const db = require("../../db/connection"); // connect to db, for db.query(), from the pool
 
 exports.fetchCommentsByID = (article_id) => {
-  // Sqql injection prevention
+  // Basic error handling
   // || !isNaN(article_id) - SQL injection prevention, put into line below
   if (article_id === undefined || article_id === "") {
-    return Promise.reject({ status: 400, msg: "invalid input" });
+    return Promise.reject({
+      status: 400,
+      msg: "invalid input" || isNaN(article_id),
+    });
   }
 
   // SQL query
@@ -35,7 +38,7 @@ exports.fetchCommentsByID = (article_id) => {
 
 exports.pushCommentUsernameBoyID = (article_id, username, body) => {
   // basic error handling
-  if (!article_id || !username || !body) {
+  if (!article_id || !username || !body || isNaN(article_id)) {
     return Promise.reject({
       status: 400,
       msg: "Missing required database fields",
