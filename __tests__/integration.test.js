@@ -27,49 +27,6 @@ describe("endpoints", () => {
           });
         });
     });
-    test("200: returns article object by article article id param", () => {
-      return request(app)
-        .get("/api/articles/1")
-        .expect(200)
-        .then(({ body }) => {
-          const mySingleArticle = body.articleItem;
-          // check correct output
-          //console.log(mySingleArticle);
-          expect(Array.isArray(mySingleArticle)).toBe(true);
-          expect(mySingleArticle.length).toBe(1);
-
-          // test each value name, and output type
-          expect(mySingleArticle[0]).toHaveProperty(
-            "author",
-            expect.any(String)
-          );
-          expect(mySingleArticle[0]).toHaveProperty(
-            "title",
-            expect.any(String)
-          );
-          expect(mySingleArticle[0]).toHaveProperty(
-            "article_id",
-            expect.any(Number)
-          );
-          expect(mySingleArticle[0]).toHaveProperty("body", expect.any(String));
-          expect(mySingleArticle[0]).toHaveProperty(
-            "topic",
-            expect.any(String)
-          );
-          expect(mySingleArticle[0]).toHaveProperty(
-            "created_at",
-            expect.any(String)
-          );
-          expect(mySingleArticle[0]).toHaveProperty(
-            "votes",
-            expect.any(Number)
-          );
-          expect(mySingleArticle[0]).toHaveProperty(
-            "article_img_url",
-            expect.any(String)
-          );
-        });
-    });
     test("200: returns an array of comments for specific article based on id param input", () => {
       return request(app)
         .get("/api/articles")
@@ -141,6 +98,68 @@ describe("endpoints", () => {
           );
         });
     });
+  });
+});
+
+// TEST COMPLETE - 3 CASES
+describe("Get, Article by article id, with count ", () => {
+  test("200: Returns article object by article article id param, including count", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        const mySingleArticle = body.articleItem;
+        // check correct output
+        //console.log(mySingleArticle);
+        expect(Array.isArray(mySingleArticle)).toBe(true);
+        expect(mySingleArticle.length).toBe(1);
+
+        // test each value name, and output type
+        expect(mySingleArticle[0]).toHaveProperty("author", expect.any(String));
+        expect(mySingleArticle[0]).toHaveProperty("title", expect.any(String));
+        expect(mySingleArticle[0]).toHaveProperty(
+          "article_id",
+          expect.any(Number)
+        );
+        expect(mySingleArticle[0]).toHaveProperty("body", expect.any(String));
+        expect(mySingleArticle[0]).toHaveProperty("topic", expect.any(String));
+        expect(mySingleArticle[0]).toHaveProperty(
+          "created_at",
+          expect.any(String)
+        );
+        expect(mySingleArticle[0]).toHaveProperty("votes", expect.any(Number));
+        expect(mySingleArticle[0]).toHaveProperty(
+          "article_img_url",
+          expect.any(String)
+        );
+        expect(mySingleArticle[0]).toHaveProperty(
+          "comment_count",
+          expect.any(String)
+        );
+      });
+  });
+  //
+  test("200: Query article by article article id param, article id that does not exist , returns empty object", () => {
+    return request(app)
+      .get("/api/articles/14")
+      .expect(500)
+      .then(({ body }) => {
+        const mySingleArticle = body.articleItem;
+        // check correct output
+        //console.log(mySingleArticle);
+        expect(body.articleItem).toEqual(undefined);
+      });
+  });
+  test("200: Query article id using completely wrong id, i.e. a letter, error to the console", () => {
+    return request(app)
+      .get("/api/articles/a")
+      .expect(400)
+      .then(({ body }) => {
+        const mySingleArticle = body.articleItem;
+        // check correct output
+        //console.log(mySingleArticle);
+        expect(body.articleItem).toEqual(undefined);
+      });
   });
 });
 

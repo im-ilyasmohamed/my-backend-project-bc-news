@@ -1,6 +1,11 @@
 const db = require("../../db/connection"); // connect to db, for db.query(), from the pool
 
 exports.fetchCommentsByID = (article_id) => {
+  // Sqql injection prevention
+  if (article_id === undefined || article_id === "" || !isNaN(article_id)) {
+    return Promise.reject({ status: 400, msg: "invalid input" });
+  }
+
   // SQL query
   let myQuery = `
     SELECT 
@@ -16,10 +21,6 @@ exports.fetchCommentsByID = (article_id) => {
       article_id = $1;
   `;
 
-  // basic error handling
-  if (article_id === undefined || article_id === "") {
-    return Promise.reject({ status: 400, msg: "invalid input" });
-  }
   // console.log();
   // call on row funcction, .then() promise which return row from query
   return db

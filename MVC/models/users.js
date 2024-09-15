@@ -1,7 +1,9 @@
 const db = require("../../db/connection");
 
-// No param inpur
+// No param input
 exports.fetchAllUsers = () => {
+  // SQL injection prevention if any future functions were put here
+
   // SQL query
   let mrQuery = `
   SELECT
@@ -14,6 +16,17 @@ exports.fetchAllUsers = () => {
   return db
     .query(mrQuery)
     .then(({ rows }) => {
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      if (rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: "No users found for this topic",
+        });
+      }
       return rows;
     })
     .catch((err) => {

@@ -1,31 +1,52 @@
 const db = require("../../db/connection"); // connect to the database
 
 exports.fetchArticleByID = (articleID) => {
+  // Check if articleID is a valid number
+  // prevent sql injection, nan is checking to make sure only numbers can be inputed (including string number)
+  if (articleID === undefined || isNaN(Number(articleID))) {
+    return Promise.reject({
+      status: 400,
+      msg: "Invalid input: article_id must be a number",
+    });
+  }
+
   // SQL query where id is $1
   let queryString = `
-    SELECT 
-        author,
-        title,
-        article_id,
-        body,
-        topic,
-        created_at,
-        votes,
-        article_img_url
-    FROM 
-      articles
-    WHERE 
-      article_id = $1;
+  SELECT 
+    articles.author,
+    articles.title,
+    articles.article_id,
+    articles.body,
+    articles.topic,
+    articles.created_at,
+    articles.votes,
+    articles.article_img_url,
+    COUNT(comments.comment_id) AS comment_count
+  FROM 
+    articles
+  LEFT JOIN 
+    comments ON articles.article_id = comments.article_id
+  WHERE 
+    articles.article_id = $1
+  GROUP BY 
+    articles.article_id;
       `;
-  // invalid param/id input, return 400 status
-  if (articleID === undefined) {
-    return Promise.reject({ status: 400, msg: "invalid input" }); // attempt at error handling
-  }
 
   // query db, with params (queryString, $1)
   return db
     .query(queryString, [articleID])
     .then(({ rows }) => {
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      if (rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: "No articles found for this topic",
+        });
+      }
       return rows;
     })
     .catch((err) => {
@@ -70,6 +91,17 @@ exports.fetchAllArticles = () => {
   return db
     .query(myQuery)
     .then(({ rows }) => {
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      if (rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: "No articles found for this topic",
+        });
+      }
       return rows;
     })
     .catch((err) => {
@@ -79,6 +111,16 @@ exports.fetchAllArticles = () => {
 };
 
 exports.editIncrementVoteUsingArticleID = (article_id, newVote) => {
+  // invalid param/id input, return 400 status
+  // could improve by checking database has article number e.g. article being above 600 should not count
+  if (isNaN(article_id)) {
+    return Promise.reject({ status: 400, msg: "invalid input" }); // attempt at error handling
+  }
+  // Check if newVote is a valid number
+  if (isNaN(Number(newVote))) {
+    return Promise.reject({ status: 400, msg: "Invalid input: newVote must be a number" });
+  }
+
   // SQL query
   const myQuery = `
   UPDATE 
@@ -90,17 +132,22 @@ exports.editIncrementVoteUsingArticleID = (article_id, newVote) => {
   RETURNING *;
   `;
 
-  // invalid param/id input, return 400 status
-  // could improve by checking database has article number e.g. article being above 600 should not count
-  if (isNaN(article_id)) {
-    return Promise.reject({ status: 400, msg: "invalid input" }); // attempt at error handling
-  }
-
   // return script query
   return db
     .query(myQuery, [newVote, article_id])
     .then(({ rows }) => {
       //console.log(rows);
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      if (rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: "No articles found for this topic",
+        });
+      }
       return rows;
     })
     .catch((err) => {
@@ -150,6 +197,17 @@ exports.fetchArticlesSortAndOrder = (sort_by, order) => {
   return db
     .query(query)
     .then(({ rows }) => {
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      if (rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: "No articles found for this topic",
+        });
+      }
       return rows;
     })
     .catch((err) => {

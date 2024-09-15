@@ -1,8 +1,8 @@
+Northcoders News API
+
 # Northcoders News API
 
-For instructions, please head over to [L2C NC News](https://l2c.northcoders.com/courses/be/nc-news).
-
-
+This is a RESTful API built as part of the Northcoders Digital Skills Bootcamp in Software Engineering (Full-Stack). The API provides the platform to interact with articles, topics and comments. This API allows users to read, vote, and comment on articles. I also includes filtering capabilitie
 
 --- 
 

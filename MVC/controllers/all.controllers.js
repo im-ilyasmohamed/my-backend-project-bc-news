@@ -74,7 +74,7 @@ exports.getAllArticlesQueryTopic = (req, res, next) => {
   const { topic } = req.query;
   fetchAllArticlesQueryTopic(topic)
     .then((articlesByTopic) => {
-      res.status(200).send({ articlesByTopic});
+      res.status(200).send({ articlesByTopic });
     })
     .catch((err) => {
       next(err);
