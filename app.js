@@ -14,6 +14,8 @@ const endpoints = require("./endpoints.json"); //require in static json file, sh
 
 const app = express(); // create and invoke instance of express object object
 // global error handler middleware, with default status code and message
+const cors = require("cors");
+app.use(cors()); // before any other routes or middleware
 app.use((err, req, res, next) => {
   res
     .status(err.status || 500)
