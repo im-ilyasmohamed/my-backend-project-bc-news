@@ -223,9 +223,17 @@ exports.fetchArticlesSortAndOrder = (sort_by, order) => {
 
 exports.fetchAllArticlesQueryTopic = (topic) => {
   // Validate topic to prevent SQL injection or bad queries
-  const validTopics = ["mitch", "cats"]; // List of valid topics, adjust based on your actual topics
+  const validTopics = [
+    "mitch",
+    "cats",
+    "paper",
+    "coding",
+    "football",
+    "cooking",
+  ]; // List of valid topics, adjust based on your actual topics
 
   if (!validTopics.includes(topic)) {
+    console.log(topic);
     return Promise.reject({ status: 400, msg: "Invalid topic" });
   }
 
@@ -250,6 +258,7 @@ exports.fetchAllArticlesQueryTopic = (topic) => {
       // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
       // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
       // IMPROVE OTHER FUNCTIONS USING THIS ERROR HANDLING
+      console.log(rows, "rows");
       if (rows.length === 0) {
         return Promise.reject({
           status: 404,

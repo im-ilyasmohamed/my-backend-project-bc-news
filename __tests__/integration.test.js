@@ -309,7 +309,7 @@ describe("removeCommentByCommentId(), deleting comment by comment id", () => {
 // REQUIRES MORE TESTING
 describe("", () => {
   test("200 - okay", () => {
-    return request(app)
+    return request(app) 
       .get("/api/users")
       .expect(200)
       .then(({ body }) => {
